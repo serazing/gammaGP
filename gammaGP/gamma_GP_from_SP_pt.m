@@ -30,8 +30,8 @@ function gamma_GP = gamma_GP_from_SP_pt(SP,pt,p,long,lat)
 %  long =  longitude
 %  lat  =  latitude
 %
-%  SP &amp; pt need to have the same dimensions.
-%  p may have dimensions 1x1 or Mx1 or 1xN or MxN, where SP &amp; pt are MxN.
+%  SP & pt need to have the same dimensions.
+%  p may have dimensions 1x1 or Mx1 or 1xN or MxN, where SP & pt are MxN.
 %
 % OUTPUT:
 %  gamma_GP  =  Global Polynomial of Neutral Density with        [ kg/m^3 ]
@@ -40,7 +40,7 @@ function gamma_GP = gamma_GP_from_SP_pt(SP,pt,p,long,lat)
 %               
 %    
 % AUTHOR: 
-%  Guillaume Serazin, Paul Barker &amp; Trevor McDougall   [ help@teos-10.org ]
+%  Guillaume Serazin, Paul Barker & Trevor McDougall   [ help@teos-10.org ]
 %
 % VERSION NUMBER: 1.0 (27th October, 2011)
 %
@@ -65,16 +65,16 @@ if (mt ~= ms | nt ~= ns)
     error('gamma_GP_from_SP_pt: SP and pt must have same dimensions')
 end
 
-if (mp == 1) &amp; (np == 1)              % p scalar - fill to size of SP
+if (mp == 1) & (np == 1)              % p scalar - fill to size of SP
     p = p*ones(size(SP));
-elseif (ns == np) &amp; (mp == 1)         % p is row vector,
+elseif (ns == np) & (mp == 1)         % p is row vector,
     p = p(ones(1,ms), :);              % copy down each column.
-elseif (ms == mp) &amp; (np == 1)         % p is column vector,
+elseif (ms == mp) & (np == 1)         % p is column vector,
     p = p(:,ones(1,ns));               % copy across each row.
-elseif (ns == mp) &amp; (np == 1)          % p is a transposed row vector,
+elseif (ns == mp) & (np == 1)          % p is a transposed row vector,
     p = p.';                              % transposed then
     p = p(ones(1,ms), :);                % copy down each column.
-elseif (ms == mp) &amp; (ns == np)
+elseif (ms == mp) & (ns == np)
     % ok
 else
     error('gamma_GP_from_SP_pt: Inputs array dimensions arguments do not agree')
@@ -82,40 +82,40 @@ end %if
 
 [mla,nla] = size(lat);
 
-if (mla == 1) &amp; (nla == 1)             % lat is a scalar - fill to size of SP
+if (mla == 1) & (nla == 1)             % lat is a scalar - fill to size of SP
     lat = lat*ones(size(SP));
-elseif (ns == nla) &amp; (mla == 1)        % lat is a row vector,
+elseif (ns == nla) & (mla == 1)        % lat is a row vector,
     lat = lat(ones(1,ms), :);           % copy down each column.
-elseif (ms == mla) &amp; (nla == 1)        % lat is a column vector,
+elseif (ms == mla) & (nla == 1)        % lat is a column vector,
     lat = lat(:,ones(1,ns));            % copy across each row.
-elseif (ns == mla) &amp; (nla == 1)        % lat is a transposed row vector,
+elseif (ns == mla) & (nla == 1)        % lat is a transposed row vector,
     lat = lat.';                         % transposed then
     lat = lat(ones(1,ms), :);           % copy down each column.
-elseif (ms == mla) &amp; (ns == nla)
+elseif (ms == mla) & (ns == nla)
     % ok
 else
     error('gamma_GP_from_SP_pt: Inputs array dimensions arguments do not agree')
 end %if
 
 [mlo,nlo] = size(long);
-[Iwest] =find(long &lt; 0);
+[Iwest] =find(long < 0);
 if ~isempty(Iwest)
     long(Iwest) = long(Iwest) + 360; 
 end
 
-if (mlo == 1) &amp; (nlo == 1)            % long is a scalar - fill to size of SP
+if (mlo == 1) & (nlo == 1)            % long is a scalar - fill to size of SP
     long = long*ones(size(SP));
-elseif (ns == nlo) &amp; (mlo == 1)       % long is a row vector,
+elseif (ns == nlo) & (mlo == 1)       % long is a row vector,
     long = long(ones(1,ms), :);        % copy down each column.
-elseif (ms == mlo) &amp; (nlo == 1)       % long is a column vector,
+elseif (ms == mlo) & (nlo == 1)       % long is a column vector,
     long = long(:,ones(1,ns));         % copy across each row. 
-elseif (ns == mlo) &amp; (nlo == 1)       % long is a transposed row vector,
+elseif (ns == mlo) & (nlo == 1)       % long is a transposed row vector,
     long = long.';                      % transposed then
     long = long(ones(1,ms), :);        % copy down each column.
-elseif (ms == nlo) &amp; (mlo == 1)       % long is a transposed column vector,
+elseif (ms == nlo) & (mlo == 1)       % long is a transposed column vector,
     long = long.';                      % transposed then
     long = long(:,ones(1,ns));        % copy down each column.
-elseif (ms == mlo) &amp; (ns == nlo)
+elseif (ms == mlo) & (ns == nlo)
     % ok
 else
     error('gamma_GP_from_SP_pt: Inputs array dimensions arguments do not agree')
@@ -185,14 +185,14 @@ i_atlantic = (1-i_pacific).*(1-i_indian);
 
 %Definition of the Atlantic weighting function
 %---------------------------------------------
-charac1_sa=(lat&lt;-10);
-charac2_sa=(lat&lt;=10)&amp;(lat&gt;=-10);
+charac1_sa=(lat<-10);
+charac2_sa=(lat<=10)&(lat>=-10);
 w_sa=charac1_sa+charac2_sa.*(1/2+1/2*cos(pi*(lat+10)/20));
 
 %Definition of the Southern Ocean weighting function
 %---------------------------------------------------  
-charac1_so=(lat&lt;-40);
-charac2_so=(lat&lt;=-20)&amp;(lat&gt;=-40);
+charac1_so=(lat<-40);
+charac2_so=(lat<=-20)&(lat>=-40);
 w_so=charac1_so+charac2_so.*(1/2+1/2*cos(pi*(lat+40)/20));
 
 
@@ -213,7 +213,7 @@ gamma_GP=w_so.*gamma_SOce+(1-w_so).*gamma_middle;
 
 %Set NaN in the arctic region
 %----------------------------
-I=find(lat&gt;66);
+I=find(lat>66);
 gamma_GP(I)=NaN;
 
 
@@ -403,3 +403,11 @@ gamma_SOce=gamma_SOce_N+gamma_SOce_S;
 
 end
 % -------------------------------------------------------------------------
+
+
+
+
+
+
+
+
